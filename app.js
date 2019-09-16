@@ -34,7 +34,8 @@ if (!isProduction) {
 console.log(process.env.MONGODB_URI)
 
 if(isProduction){
-  mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
+  const uri = "mongodb+srv://Tim:chuckles1@cluster0-oxqw5.mongodb.net/test?retryWrites=true&w=majority";
+  mongoose.connect(uri, { useNewUrlParser: true });
 } else {
   mongoose.connect('mongodb://localhost/conduit', {
     useNewUrlParser: true,
