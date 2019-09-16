@@ -1,14 +1,14 @@
 var fs = require('fs'),
-    http = require('http'),
-    path = require('path'),
-    methods = require('methods'),
-    express = require('express'),
-    bodyParser = require('body-parser'),
-    session = require('express-session'),
-    cors = require('cors'),
-    passport = require('passport'),
-    errorhandler = require('errorhandler'),
-    mongoose = require('mongoose');
+  http = require('http'),
+  path = require('path'),
+  methods = require('methods'),
+  express = require('express'),
+  bodyParser = require('body-parser'),
+  session = require('express-session'),
+  cors = require('cors'),
+  passport = require('passport'),
+  errorhandler = require('errorhandler'),
+  mongoose = require('mongoose');
 
 var isProduction = process.env.NODE_ENV === 'production';
 console.log("IS THE APP RUNNING AT ALL?")
@@ -19,13 +19,22 @@ app.use(cors());
 
 // Normal express config defaults
 app.use(require('morgan')('dev'));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 app.use(bodyParser.json());
 
 app.use(require('method-override')());
 app.use(express.static(__dirname + '/public'));
 
-app.use(session({ secret: 'conduit', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false  }));
+app.use(session({
+  secret: 'conduit',
+  cookie: {
+    maxAge: 60000
+  },
+  resave: false,
+  saveUninitialized: false
+}));
 
 if (!isProduction) {
   app.use(errorhandler());
@@ -33,9 +42,12 @@ if (!isProduction) {
 
 console.log(process.env.MONGODB_URI)
 
-if(isProduction){
+if (isProduction) {
   const uri = "mongodb+srv://Tim:chuckles1@cluster0-oxqw5.mongodb.net/test?retryWrites=true&w=majority";
-  mongoose.connect(uri, { useNewUrlParser: true });
+  mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  });
 } else {
   mongoose.connect('mongodb://localhost/conduit', {
     useNewUrlParser: true,
@@ -66,10 +78,12 @@ if (!isProduction) {
 
     res.status(err.status || 500);
 
-    res.json({'errors': {
-      message: err.message,
-      error: err
-    }});
+    res.json({
+      'errors': {
+        message: err.message,
+        error: err
+      }
+    });
   });
 }
 
@@ -77,13 +91,15 @@ if (!isProduction) {
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
-  res.json({'errors': {
-    message: err.message,
-    error: {}
-  }});
+  res.json({
+    'errors': {
+      message: err.message,
+      error: {}
+    }
+  });
 });
 
 // finally, let's start our server...
-var server = app.listen( process.env.PORT || 3000, function(){
+var server = app.listen(process.env.PORT || 3000, function() {
   console.log('Listening on port ' + server.address().port);
 });
