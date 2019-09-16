@@ -1,7 +1,7 @@
 {
-  "name": "conduit-node",
+  "name": "village-green-node-api",
   "version": "1.0.0",
-  "description": "conduit on node",
+  "description": "Village Green's backend API",
   "main": "app.js",
   "scripts": {
     "start": "node ./app.js",

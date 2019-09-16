@@ -11,7 +11,7 @@ var fs = require('fs'),
     mongoose = require('mongoose');
 
 var isProduction = process.env.NODE_ENV === 'production';
-
+console.log("IS THE APP RUNNING AT ALL?")
 // Create global app object
 var app = express();
 
@@ -43,7 +43,6 @@ if(isProduction){
 
 require('./models/User');
 require('./config/passport');
-
 
 app.use(require('./routes'));
 
