@@ -43,7 +43,7 @@ if (!isProduction) {
 console.log(process.env.MONGODB_URI)
 
 if (isProduction) {
-  const uri = "mongodb+srv://Tim:chuckles1@cluster0-oxqw5.mongodb.net/test?retryWrites=true&w=majority";
+  const uri = "mongodb+srv://Tim:chuckles@cluster0-oxqw5.mongodb.net/test?retryWrites=true&w=majority";
   mongoose.connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true
