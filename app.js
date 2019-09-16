@@ -31,6 +31,8 @@ if (!isProduction) {
   app.use(errorhandler());
 }
 
+console.log(process.env.MONGODB_URI)
+
 if(isProduction){
   mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
 } else {
