@@ -11,6 +11,8 @@ var UserSchema = new mongoose.Schema({
   name: String,
   email: {type: String, lowercase: true, unique: true, required: [true, "can't be blank"], match: [/\S+@\S+\.\S+/, 'is invalid'], index: true},
   address: String,
+  homeXCoord: Number,
+  homeYCoord: Number,
   dob: String,
   image: String,
   hash: String,
@@ -45,6 +47,15 @@ UserSchema.methods.toAuthJSON = function() {
     token: this.generateJWT(),
     bio: this.bio,
     image: this.image
+  };
+};
+
+UserSchema.methods.toProfileJSONFor = function(){
+  return {
+    username: this.username,
+    bio: this.bio,
+    image: this.image || 'https://static.productionready.io/images/smiley-cyrus.jpg',
+    following:  false  // we'll implement following functionality in a few chapters :)
   };
 };
 
