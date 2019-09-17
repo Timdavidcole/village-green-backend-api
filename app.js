@@ -11,7 +11,6 @@ var fs = require('fs'),
   mongoose = require('mongoose');
 
 var isProduction = process.env.NODE_ENV === 'production';
-const MongoClient = require('mongodb').MongoClient;
 
 console.log("IS THE APP RUNNING AT ALL?")
 // Create global app object
@@ -46,7 +45,7 @@ console.log(process.env.MONGODB_URI)
 
 if (isProduction) {
   const uri = "mongodb+srv://@cluster0-oxqw5.mongodb.net/test?retryWrites=true&w=majority";
-  const client = new MongoClient(uri, {
+  mongoose.connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   });
