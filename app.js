@@ -48,7 +48,7 @@ if (isProduction) {
     useUnifiedTopology: true
   });
 } else {
-  mongoose.connect('mongodb://localhost/conduit', {
+  mongoose.connect('mongodb://localhost/village-green', {
     useNewUrlParser: true,
     useUnifiedTopology: true
   });

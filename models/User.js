@@ -11,6 +11,7 @@ var UserSchema = new mongoose.Schema({
   name: String,
   email: {type: String, lowercase: true, unique: true, required: [true, "can't be blank"], match: [/\S+@\S+\.\S+/, 'is invalid'], index: true},
   address: String,
+  bio: String,
   homeXCoord: Number,
   homeYCoord: Number,
   dob: String,
@@ -51,6 +52,7 @@ UserSchema.methods.toAuthJSON = function() {
 };
 
 UserSchema.methods.toProfileJSONFor = function(user){
+  console.log(this.bio)
   return {
     username: this.username,
     bio: this.bio,
