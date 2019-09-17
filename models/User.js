@@ -48,4 +48,6 @@ UserSchema.methods.toAuthJSON = function() {
   };
 };
 
+UserSchema.plugin(uniqueValidator, {message: 'is already taken.'});
+
 mongoose.model('User', UserSchema);
