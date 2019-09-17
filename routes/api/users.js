@@ -88,6 +88,21 @@ router.put('/user', auth.required, function(req, res, next) {
     if (typeof req.body.user.password !== 'undefined') {
       user.setPassword(req.body.user.password);
     }
+    if (typeof req.body.user.address !== 'undefined') {
+      user.address = req.body.user.address;
+    }
+    if (typeof req.body.user.homeXCoord !== 'undefined') {
+      user.homeXCoord = req.body.user.homeXCoord;
+    }
+    if (typeof req.body.user.homeYCoord !== 'undefined') {
+      user.homeYCoord = req.body.user.homeYCoord;
+    }
+    if (typeof req.body.user.name !== 'undefined') {
+      user.name = req.body.user.name;
+    }
+    if (typeof req.body.user.dob !== 'undefined') {
+      user.dob = req.body.user.dob;
+    }
 
     return user.save().then(function() {
       User.findById(req.payload.id).then(function(userNew){
