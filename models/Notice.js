@@ -13,6 +13,10 @@ var NoticeSchema = new mongoose.Schema({
   description: String,
   body: String,
   image: String,
+  comments: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Comment'
+  }],
   favoritesCount: {
     type: Number,
     default: 0
@@ -98,12 +102,14 @@ NoticeSchema.methods.updateDownVoteCount = function() {
 };
 
 NoticeSchema.methods.toJSONFor = function(user) {
+  console.log(this.author)
   return {
     slug: this.slug,
     title: this.title,
     description: this.description,
     body: this.body,
     image: this.image,
+    comments: this.comments,
     favoritesCount: this.favoritesCount,
     upVotesCount: this.upVotesCount,
     downVotesCount: this.downVotesCount,

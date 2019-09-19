@@ -56,6 +56,7 @@ if (isProduction) {
 
 require('./models/User');
 require('./models/Notice')
+require('./models/Comment');
 require('./config/passport');
 
 app.use(require('./routes'));
