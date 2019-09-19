@@ -4,7 +4,7 @@ var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
 var secret = require('../config').secret;
 
-console.log("IS THE USER MODEL RUNNING?")
+console.log("USER MODEL IS BEING READ")
 
 var UserSchema = new mongoose.Schema({
   username: {type: String, lowercase: true, unique: true, required: [true, "can't be blank"], match: [/^[a-zA-Z0-9]+$/, 'is invalid'], index: true},
@@ -47,16 +47,20 @@ UserSchema.methods.toAuthJSON = function() {
     email: this.email,
     token: this.generateJWT(),
     bio: this.bio,
-    image: this.image
+    image: this.image,
+    address: this.address
   };
 };
 
 UserSchema.methods.toProfileJSONFor = function(user){
-  console.log(this.bio)
   return {
     username: this.username,
     bio: this.bio,
     image: this.image || 'https://static.productionready.io/images/smiley-cyrus.jpg',
+    address: this.address,
+    homeXCoord: this.homeXCoord,
+    homeYCoord: this.homeYCoord,
+    id: this._id,
     following:  false  // we'll implement following functionality in a few chapters :)
   };
 };

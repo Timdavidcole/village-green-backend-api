@@ -12,7 +12,6 @@ var fs = require('fs'),
 
 var isProduction = process.env.NODE_ENV === 'production';
 
-console.log("IS THE APP RUNNING AT ALL?")
 // Create global app object
 var app = express();
 
@@ -56,6 +55,7 @@ if (isProduction) {
 }
 
 require('./models/User');
+require('./models/Notice')
 require('./config/passport');
 
 app.use(require('./routes'));
@@ -73,8 +73,6 @@ app.use(function(req, res, next) {
 // will print stacktrace
 if (!isProduction) {
   app.use(function(err, req, res, next) {
-    console.log(err.stack);
-
     res.status(err.status || 500);
 
     res.json({

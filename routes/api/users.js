@@ -5,7 +5,7 @@ var User = mongoose.model('User');
 var auth = require('../auth');
 
 router.post('/users', function(req, res, next) {
-  console.log("POST USERS")
+  console.log("POST USERS FUNCTION")
   var user = new User();
 
   user.username = req.body.user.username;
@@ -105,7 +105,7 @@ router.put('/user', auth.required, function(req, res, next) {
     }
 
     return user.save().then(function() {
-      User.findById(req.payload.id).then(function(userNew){
+      User.findById(req.payload.id).then(function(userNew) {
         return res.json({
           user: userNew.toAuthJSON()
         });
@@ -114,6 +114,6 @@ router.put('/user', auth.required, function(req, res, next) {
   }).catch(next);
 });
 
-console.log("ARE THE ROUTES BEING READ?")
+console.log("THE ROUTES ARE BEING READ")
 
 module.exports = router;
