@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var uniqueValidator = require('mongoose-unique-validator');
 var slug = require('slug'); // package we'll use to auto create URL slugs
+var User = mongoose.model('User');
 
 var NoticeSchema = new mongoose.Schema({
   slug: {
@@ -12,11 +13,15 @@ var NoticeSchema = new mongoose.Schema({
   description: String,
   body: String,
   image: String,
-  upVotes: {
+  favoritesCount: {
     type: Number,
     default: 0
   },
-  downVotes: {
+  upVotesCount: {
+    type: Number,
+    default: 0
+  },
+  downVotesCount: {
     type: Number,
     default: 0
   },
@@ -47,6 +52,51 @@ NoticeSchema.pre('validate', function(next) {
   next();
 });
 
+NoticeSchema.methods.updateFavoriteCount = function() {
+  var notice = this;
+
+  return User.count({
+    favorites: {
+      $in: [notice._id]
+    }
+  }).then(function(count) {
+    notice.favoritesCount = count;
+
+    return notice.save();
+  });
+};
+
+NoticeSchema.methods.updateUpVoteCount = function() {
+  var notice = this;
+  console.log('running updateUpVoteCount')
+
+  return User.count({
+    upVoted: {
+      $in: [notice._id]
+    }
+  }).then(function(count) {
+    console.log(count)
+    notice.upVotesCount = count;
+
+    return notice.save();
+  });
+};
+
+NoticeSchema.methods.updateDownVoteCount = function() {
+  var notice = this;
+
+  return User.count({
+    downVoted: {
+      $in: [notice._id]
+    }
+  }).then(function(count) {
+    console.log(count)
+    notice.downVotesCount = count;
+
+    return notice.save();
+  });
+};
+
 NoticeSchema.methods.toJSONFor = function(user) {
   return {
     slug: this.slug,
@@ -54,12 +104,17 @@ NoticeSchema.methods.toJSONFor = function(user) {
     description: this.description,
     body: this.body,
     image: this.image,
-    upVotes: this.upVotes,
-    downVotes: this.downVotes,
+    favoritesCount: this.favoritesCount,
+    upVotesCount: this.upVotesCount,
+    downVotesCount: this.downVotesCount,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
     tagList: this.tagList,
-    author: this.author.toProfileJSONFor(user)
+    author: this.author.toProfileJSONFor(user),
+    isFavorite: user ? user.isFavorite(this._id) : false,
+    isUpVoted: user ? user.isUpVoted(this._id) : false,
+    isDownVoted: user ? user.isDownVoted(this._id) : false,
+    id: this._id
   };
 };
 

@@ -72,15 +72,130 @@ router.put('/:notice', auth.required, function(req, res, next) {
 });
 
 router.delete('/:notice', auth.required, function(req, res, next) {
-  User.findById(req.payload.id).then(function(){
-    if(req.notice.author._id.toString() === req.payload.id.toString()){
-      return req.notice.remove().then(function(){
+  User.findById(req.payload.id).then(function() {
+    if (req.notice.author._id.toString() === req.payload.id.toString()) {
+      return req.notice.remove().then(function() {
         return res.sendStatus(204);
       });
     } else {
       return res.sendStatus(403);
     }
   });
+});
+
+router.post('/:notice/favorite', auth.required, function(req, res, next) {
+  var noticeId = req.notice._id;
+
+  User.findById(req.payload.id).then(function(user) {
+    if (!user) {
+      return res.sendStatus(401);
+    }
+
+    return user.favorite(noticeId).then(function() {
+      return req.notice.updateFavoriteCount().then(function(notice) {
+        return res.json({
+          notice: notice.toJSONFor(user)
+        });
+      });
+    });
+  }).catch(next);
+});
+
+router.post('/:notice/upVote', auth.required, function(req, res, next) {
+  var noticeId = req.notice._id;
+
+  User.findById(req.payload.id).then(function(user) {
+    if (!user) {
+      return res.sendStatus(401);
+    }
+
+    return user.upVote(noticeId).then(function() {
+      console.log('UPDATING UP VOTE COUNT')
+
+      return req.notice.updateUpVoteCount().then(function(notice) {
+        return res.json({
+          notice: notice.toJSONFor(user)
+        });
+      });
+    });
+  }).catch(next);
+});
+
+router.post('/:notice/downVote', auth.required, function(req, res, next) {
+  var noticeId = req.notice._id;
+
+  User.findById(req.payload.id).then(function(user) {
+    if (!user) {
+      return res.sendStatus(401);
+    }
+
+    return user.downVote(noticeId).then(function() {
+      console.log('UPDATING DOWN VOTE COUNT')
+
+      return req.notice.updateDownVoteCount().then(function(notice) {
+        return res.json({
+          notice: notice.toJSONFor(user)
+        });
+      });
+    });
+  }).catch(next);
+});
+
+router.delete('/:notice/favorite', auth.required, function(req, res, next) {
+  var noticeId = req.notice._id;
+
+  User.findById(req.payload.id).then(function(user) {
+    if (!user) {
+      return res.sendStatus(401);
+    }
+
+    return user.unfavorite(noticeId).then(function() {
+      return req.notice.updateFavoriteCount().then(function(notice) {
+        return res.json({
+          notice: notice.toJSONFor(user)
+        });
+      });
+    });
+  }).catch(next);
+});
+
+router.delete('/:notice/upVote', auth.required, function(req, res, next) {
+  var noticeId = req.notice._id;
+
+  User.findById(req.payload.id).then(function(user) {
+    if (!user) {
+      return res.sendStatus(401);
+    }
+
+    return user.removeUpVote(noticeId).then(function() {
+      console.log('UPDATING UP VOTE COUNT')
+      return req.notice.updateUpVoteCount().then(function(notice) {
+        return res.json({
+          notice: notice.toJSONFor(user)
+        });
+      });
+    });
+  }).catch(next);
+});
+
+router.delete('/:notice/downVote', auth.required, function(req, res, next) {
+  var noticeId = req.notice._id;
+
+  User.findById(req.payload.id).then(function(user) {
+    if (!user) {
+      return res.sendStatus(401);
+    }
+
+    return user.removeDownVote(noticeId).then(function() {
+      console.log('UPDATING DOWN VOTE COUNT')
+
+      return req.notice.updateDownVoteCount().then(function(notice) {
+        return res.json({
+          notice: notice.toJSONFor(user)
+        });
+      });
+    });
+  }).catch(next);
 });
 
 router.param('notice', function(req, res, next, slug) {
