@@ -78,7 +78,8 @@ UserSchema.methods.toAuthJSON = function() {
     image: this.image,
     address: this.address,
     homeXCoord: this.homeXCoord,
-    homeYCoord: this.homeYCoord
+    homeYCoord: this.homeYCoord,
+    id: this._id,
   };
 };
 

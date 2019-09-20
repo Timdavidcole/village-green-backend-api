@@ -18,7 +18,6 @@ router.post('/users', function(req, res, next) {
     user.homeXCoord = data.results[0].geometry.location.lat
     user.homeYCoord = data.results[0].geometry.location.lng
   }).then(date => {
-    console.log(user)
     user.save().then(function() {
       return res.json({
         user: user.toAuthJSON()
@@ -96,15 +95,6 @@ router.put('/user', auth.required, function(req, res, next) {
     if (typeof req.body.user.password !== 'undefined') {
       user.setPassword(req.body.user.password);
     }
-    if (typeof req.body.user.address !== 'undefined') {
-      user.address = req.body.user.address;
-    }
-    if (typeof req.body.user.homeXCoord !== 'undefined') {
-      user.homeXCoord = req.body.user.homeXCoord;
-    }
-    if (typeof req.body.user.homeYCoord !== 'undefined') {
-      user.homeYCoord = req.body.user.homeYCoord;
-    }
     if (typeof req.body.user.name !== 'undefined') {
       user.name = req.body.user.name;
     }
@@ -112,13 +102,27 @@ router.put('/user', auth.required, function(req, res, next) {
       user.dob = req.body.user.dob;
     }
 
-    return user.save().then(function() {
-      User.findById(req.payload.id).then(function(userNew) {
-        return res.json({
-          user: userNew.toAuthJSON()
-        });
-      })
-    });
+    if (typeof req.body.user.address !== 'undefined') {
+      user.address = req.body.user.address;
+      geocoding.getCoordinates(user.address).then((data) => {
+        user.homeXCoord = data.results[0].geometry.location.lat
+        user.homeYCoord = data.results[0].geometry.location.lng
+      }).then(date => {
+        user.save().then(function() {
+          return res.json({
+            user: user.toAuthJSON()
+          });
+        })
+      }).catch(next);
+    } else {
+      return user.save().then(function() {
+        User.findById(req.payload.id).then(function(userNew) {
+          return res.json({
+            user: userNew.toAuthJSON()
+          });
+        })
+      });
+    }
   }).catch(next);
 });
 
