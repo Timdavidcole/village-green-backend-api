@@ -4,7 +4,6 @@
   "description": "Village Green's backend API",
   "main": "app.js",
   "scripts": {
-    "prestart": "next build",
     "start": "nodemon ./app.js",
     "dev": "nodemon ./app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
