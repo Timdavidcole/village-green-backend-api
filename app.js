@@ -41,7 +41,7 @@ if (!isProduction) {
 }
 
 if (isProduction) {
-  const uri = "mongodb+srv://tim:chuckles1@cluster0-6cbik.mongodb.net/test?retryWrites=true&w=majority";
+  const uri = "mongodb+srv://tim:chuckles1@village-green-api-6cbik.mongodb.net/test?retryWrites=true&w=majority";
   mongoose.connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true
