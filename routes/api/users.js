@@ -3,6 +3,7 @@ var router = require('express').Router();
 var passport = require('passport');
 var User = mongoose.model('User');
 var auth = require('../auth');
+var geocoding = require('../../models/GeoCoding');
 
 router.post('/users', function(req, res, next) {
   console.log("POST USERS FUNCTION")
@@ -11,12 +12,18 @@ router.post('/users', function(req, res, next) {
   user.username = req.body.user.username;
   user.email = req.body.user.email;
   user.setPassword(req.body.user.password);
+  user.address = req.body.user.address;
 
-  user.save().then(function() {
-    return res.json({
-      user: user.toAuthJSON()
-    });
-  }).catch(next);
+  geocoding.getCoordinates(user.address).then((data) => {
+    user.homeXCoord = data.results[0].geometry.location.lat
+    user.homeYCoord = data.results[0].geometry.location.lng
+  }).then(date => {
+    console.log(user)
+    user.save().then(function() {
+      return res.json({
+        user: user.toAuthJSON()
+      });
+    })}).catch(next);
 });
 
 router.post('/users/login', function(req, res, next) {
