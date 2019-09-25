@@ -1,6 +1,6 @@
 # village-green-backend-api
 
-Welcome to the backend API for Village Green.  The Noticeboard App.  This was built using Node.js and Express, and currently hosted on Heroku, although I'm looking to get it up on AWS asap.  There are some google maps API calls in there so please don't spam user creation!
+Welcome to the backend API for Village Green: The Local Noticeboard App.  This was built using Node.js and Express, and currently hosted on Heroku, although I'm looking to get it up on AWS asap.  There are some google maps API calls in there so please don't spam user creation!
 
 URL Root: `https://village-green-backend-api.herokuapp.com`
 
