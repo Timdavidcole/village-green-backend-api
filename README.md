@@ -16,7 +16,7 @@ If the backend is about to run on a different host/port than the frontend, make 
 
 ## Usage
 
-Well if you fancy using it to build your own front-end knock yourself out.  But just playing around with some calls in the excellent [Postman](https://www.getpostman.com/) is got way to have a look.
+Well if you fancy using it to build your own front-end knock yourself out.  But just playing around with some calls in the excellent [Postman](https://www.getpostman.com/) is good way to have a rummage.
 
 ### Example Call
 
