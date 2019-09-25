@@ -86,7 +86,7 @@ Make sure the right content type like `Content-Type: application/json; charset=u
 }
 ```
 
-### Multiple Articles
+### Multiple Notices
 
 ```JSON
 {
@@ -367,15 +367,15 @@ Favorited by user:
 
 `?favorited=jake`
 
-Limit number of articles (default is 20):
+Limit number of notices (default is 20):
 
 `?limit=20`
 
-Offset/skip number of articles (default is 0):
+Offset/skip number of notices (default is 0):
 
 `?offset=0`
 
-Authentication optional, will return [multiple articles](#multiple-articles), ordered by most recent first
+Authentication optional, will return [multiple notices](#multiple-notices), ordered by most recent first
 
 
 
@@ -383,37 +383,37 @@ Authentication optional, will return [multiple articles](#multiple-articles), or
 
 `GET /api/notices/feed`
 
-Can also take `limit` and `offset` query parameters like [List Articles](#list-articles)
+Can also take `limit` and `offset` query parameters like [List notices](#list-notices)
 
-Authentication required, will return [multiple articles](#multiple-articles) created by followed users, ordered by most recent first.
+Authentication required, will return [multiple notices](#multiple-notices) created by followed users, ordered by most recent first.
 
 *Currently only gives most recent, will update to show only local.
 
 
-### Get Article
+### Get Notice
 
-`GET /api/articles/:slug`
+`GET /api/notices/:slug`
 
-No authentication required, will return [single article](#single-article)
+No authentication required, will return [single notice](#single-notice)
 
-### Create Article
+### Create Notice
 
-`POST /api/articles`
+`POST /api/notices`
 
 Example request body:
 
 ```JSON
 {
-  "article": {
-    "title": "How to train your dragon",
-    "description": "Ever wonder how?",
-    "body": "You have to believe",
-    "tagList": ["reactjs", "angularjs", "dragons"]
+  "notice": {
+    "title": "Notice test",
+    "description": "A test post",
+    "body": "Hey, we all love a good test.",
+    "tagList": ["test", "notice"]
   }
 }
 ```
 
-Authentication required, will return an [Article](#single-article)
+Authentication required, will return an [Notice](#single-notice)
 
 Required fields: `title`, `description`, `body`
 
@@ -421,30 +421,30 @@ Optional fields: `tagList` as an array of Strings
 
 
 
-### Update Article
+### Update Notice
 
-`PUT /api/articles/:slug`
+`PUT /api/notices/:slug`
 
 Example request body:
 
 ```JSON
 {
-  "article": {
-    "title": "Did you train your dragon?"
+  "notice": {
+    "title": "Updated Title"
   }
 }
 ```
 
-Authentication required, returns the updated [Article](#single-article)
+Authentication required, returns the updated [Notice](#single-notice)
 
 Optional fields: `title`, `description`, `body`
 
 The `slug` also gets updated when the `title` is changed
 
 
-### Delete Article
+### Delete Notice
 
-`DELETE /api/articles/:slug`
+`DELETE /api/notices/:slug`
 
 Authentication required
 
@@ -459,7 +459,7 @@ Example request body:
 ```JSON
 {
   "comment": {
-    "body": "His name was my name too."
+    "body": "I love to comment on everythin."
   }
 }
 ```
@@ -476,6 +476,21 @@ Required field: `body`
 
 Authentication optional, returns [multiple comments](#multiple-comments)
 
+### Update Comment
+
+`PUT /api/notices/:slug/comments/:id`
+
+Example request body:
+
+```JSON
+{
+  "comment": {
+    "body": "Actually I think this about that notice"
+  }
+}
+```
+
+Authentication required, returns the updated [Notice](#single-notice)
 
 
 ### Delete Comment
