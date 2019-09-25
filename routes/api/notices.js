@@ -51,7 +51,7 @@ router.get('/', auth.optional, function(req, res, next) {
     }
 
     return Promise.all([
-      Article.find(query)
+      Notice.find(query)
       .limit(Number(limit))
       .skip(Number(offset))
       .sort({
@@ -59,18 +59,18 @@ router.get('/', auth.optional, function(req, res, next) {
       })
       .populate('author')
       .exec(),
-      Article.count(query).exec(),
+      Notice.count(query).exec(),
       req.payload ? User.findById(req.payload.id) : null,
     ]).then(function(results) {
-      var articles = results[0];
-      var articlesCount = results[1];
+      var notices = results[0];
+      var noticesCount = results[1];
       var user = results[2];
 
       return res.json({
-        articles: articles.map(function(article) {
-          return article.toJSONFor(user);
+        notices: notices.map(function(notice) {
+          return notice.toJSONFor(user);
         }),
-        articlesCount: articlesCount
+        noticesCount: noticesCount
       });
     });
   }).catch(next);
