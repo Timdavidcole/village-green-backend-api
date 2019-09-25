@@ -273,9 +273,10 @@ Example request body:
 ```JSON
 {
   "user":{
-    "username": "Jacob",
-    "email": "jake@jake.jake",
-    "password": "jakejake"
+    "username": "readme",
+    "email": "readme@readme.readme",
+    "password": "123456",
+    "address": "Buckingham Place, London"
   }
 }
 ```
@@ -293,7 +294,6 @@ Required fields: `email`, `username`, `password`
 Authentication required, returns a [User](#users-for-authentication) that's the current user
 
 
-
 ### Update User
 
 `PUT /api/user`
@@ -302,17 +302,18 @@ Example request body:
 ```JSON
 {
   "user":{
-    "email": "jake@jake.jake",
-    "bio": "I like to skateboard",
-    "image": "https://i.stack.imgur.com/xHWG8.jpg"
+    "email": "readme1@readme1.readme1",
+    "bio": "another readme",
+    "image": "https://image.jpg",
+    "address": "10 Downing Street, London"
   }
 }
 ```
 
 Authentication required, returns the [User](#users-for-authentication)
 
-
 Accepted fields: `email`, `username`, `password`, `image`, `bio`
+Only field that requires updating required.
 
 
 
@@ -344,17 +345,17 @@ No additional parameters required
 
 
 
-### List Articles
+### List Notices
 
-`GET /api/articles`
+`GET /api/notices`
 
-Returns most recent articles globally by default, provide `tag`, `author` or `favorited` query parameter to filter results
+Returns most recent notices globally by default, provide `tag`, `author` or `favorited` query parameter to filter results
 
 Query Parameters:
 
 Filter by tag:
 
-`?tag=AngularJS`
+`?tag=readme`
 
 Filter by author:
 
@@ -376,13 +377,15 @@ Authentication optional, will return [multiple articles](#multiple-articles), or
 
 
 
-### Feed Articles
+### Feed Notices
 
-`GET /api/articles/feed`
+`GET /api/notices/feed`
 
 Can also take `limit` and `offset` query parameters like [List Articles](#list-articles)
 
 Authentication required, will return [multiple articles](#multiple-articles) created by followed users, ordered by most recent first.
+
+*Currently only gives most recent, will update to show only local.
 
 
 ### Get Article
