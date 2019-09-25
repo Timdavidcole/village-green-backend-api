@@ -14,6 +14,30 @@ If the backend is about to run on a different host/port than the frontend, make 
 
 `Authorization: Token jwt.token.here`
 
+## Usage
+
+Well if you fancy using it to build your own front-end knock yourself out.  But just playing around with some calls in the excellent [Postman](https://www.getpostman.com/) is got way to have a look.
+
+### Example Call
+
+```
+POST /api/users HTTP/1.1
+Host: village-green-backend-api.herokuapp.com
+Content-Type: application/json
+X-Requested-With: XMLHttpRequest
+User-Agent: PostmanRuntime/7.17.1
+Accept: */*
+Cache-Control: no-cache
+Postman-Token: cff5982d-a8dd-4df0-aa95-7f246f0b1774,42f84f44-a99e-45a3-add2-1d7342ca77e4
+Host: village-green-backend-api.herokuapp.com
+Accept-Encoding: gzip, deflate
+Content-Length: 118
+Connection: keep-alive
+cache-control: no-cache
+
+{"user":{"email":"readme@readme.readme","password":"readme","username":"readme","address":"Buckingham Place, London"}}
+```
+
 ## JSON Objects returned by API:
 
 Make sure the right content type like `Content-Type: application/json; charset=utf-8` is correctly returned.
