@@ -4,7 +4,7 @@ Welcome to the backend API for Village Green.  The Noticeboard App.  This was bu
 
 URL Root: `https://village-green-backend-api.herokuapp.com`
 
-Many thanks to the [Thinkster walkthrough](https://thinkster.io/tutorials/node-json-api), which I used significantly in the creation of this API.  
+Many thanks to this [Thinkster walkthrough](https://thinkster.io/tutorials/node-json-api), which I used significantly in the creation of this API.  
 
 ## Considerations for your backend with [CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 
