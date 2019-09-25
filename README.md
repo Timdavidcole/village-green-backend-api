@@ -35,7 +35,7 @@ Content-Length: 118
 Connection: keep-alive
 cache-control: no-cache
 
-{"user":{"email":"readme@readme.readme","password":"readme","username":"readme","address":"Buckingham Place, London"}}
+{"user":{"email":"readme@readme.readme","password":"test","username":"readme","address":"Buckingham Place, London"}}
 ```
 
 ## JSON Objects returned by API:
@@ -280,8 +280,8 @@ Example request body:
 ```JSON
 {
   "user":{
-    "email": "jake@jake.jake",
-    "password": "jakejake"
+    "email": "readme@readme.readme",
+    "password": "test"
   }
 }
 ```
@@ -301,7 +301,7 @@ Example request body:
   "user":{
     "username": "readme",
     "email": "readme@readme.readme",
-    "password": "123456",
+    "password": "test",
     "address": "Buckingham Place, London"
   }
 }
