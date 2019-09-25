@@ -1,5 +1,7 @@
 # village-green-backend-api
 
+Welcome to the backend API for Village Green.  The Noticeboard App.  This was built using Node.js and Express, and currently hosted on Heroku, although I'm looking to get it up on AWS asap.
+
 ## Considerations for your backend with [CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 
 If the backend is about to run on a different host/port than the frontend, make sure to handle `OPTIONS` too and return correct `Access-Control-Allow-Origin` and `Access-Control-Allow-Headers` (e.g. `Content-Type`).
