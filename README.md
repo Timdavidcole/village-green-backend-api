@@ -16,13 +16,15 @@ Make sure the right content type like `Content-Type: application/json; charset=u
 
 ```JSON
 {
-  "user": {
-    "email": "jake@jake.jake",
-    "token": "jwt.token.here",
-    "username": "jake",
-    "bio": "I work at statefarm",
-    "image": null
-  }
+    "user": {
+        "username": "readme",
+        "email": "readme@readme.readme",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkOGJhZjlhMjA3M2U4MDAyNDBhMGM4MyIsInVzZXJuYW1lIjoicmVhZG1lIiwiZXhwIjoxNTc0NjE5NTQ2LCJpYXQiOjE1Njk0MzU1NDZ9.muur17oO-kMBUq_LvOlSi1LQ4lLHJ2sVtYEEe9nyg38",
+        "address": "Buckingham Place, London",
+        "homeXCoord": 51.4989618,
+        "homeYCoord": -0.140317,
+        "id": "5d8baf9a2073e800240a0c83"
+    }
 }
 ```
 
@@ -30,36 +32,51 @@ Make sure the right content type like `Content-Type: application/json; charset=u
 
 ```JSON
 {
-  "profile": {
-    "username": "jake",
-    "bio": "I work at statefarm",
-    "image": "https://static.productionready.io/images/smiley-cyrus.jpg",
-    "following": false
-  }
+    "profile": {
+        "username": "readme",
+        "image": "https://static.productionready.io/images/smiley-cyrus.jpg",
+        "address": "Buckingham Place, London",
+        "homeXCoord": 51.4989618,
+        "homeYCoord": -0.140317,
+        "id": "5d8baf9a2073e800240a0c83",
+        "following": false
+    }
 }
 ```
 
-### Single Article
+### Single Notice
 
 ```JSON
 {
-  "article": {
-    "slug": "how-to-train-your-dragon",
-    "title": "How to train your dragon",
-    "description": "Ever wonder how?",
-    "body": "It takes a Jacobian",
-    "tagList": ["dragons", "training"],
-    "createdAt": "2016-02-18T03:22:56.637Z",
-    "updatedAt": "2016-02-18T03:48:35.824Z",
-    "favorited": false,
-    "favoritesCount": 0,
-    "author": {
-      "username": "jake",
-      "bio": "I work at statefarm",
-      "image": "https://i.stack.imgur.com/xHWG8.jpg",
-      "following": false
+    "notice": {
+        "slug": "how-to-write-a-readme-jz92lk",
+        "title": "How to write a readme",
+        "description": "Job Request",
+        "body": "Could anyone help me with writing a readme?",
+        "comments": [],
+        "favoritesCount": 0,
+        "upVotesCount": 0,
+        "downVotesCount": 0,
+        "createdAt": "2019-09-25T18:34:30.156Z",
+        "updatedAt": "2019-09-25T18:34:30.156Z",
+        "tagList": [
+            "readme",
+            "help"
+        ],
+        "author": {
+            "username": "readme",
+            "image": "https://static.productionready.io/images/smiley-cyrus.jpg",
+            "address": "Buckingham Place, London",
+            "homeXCoord": 51.4989618,
+            "homeYCoord": -0.140317,
+            "id": "5d8baf9a2073e800240a0c83",
+            "following": false
+        },
+        "isFavorite": false,
+        "isUpVoted": false,
+        "isDownVoted": false,
+        "id": "5d8bb3362073e800240a0c84"
     }
-  }
 }
 ```
 
@@ -67,40 +84,67 @@ Make sure the right content type like `Content-Type: application/json; charset=u
 
 ```JSON
 {
-  "articles":[{
-    "slug": "how-to-train-your-dragon",
-    "title": "How to train your dragon",
-    "description": "Ever wonder how?",
-    "body": "It takes a Jacobian",
-    "tagList": ["dragons", "training"],
-    "createdAt": "2016-02-18T03:22:56.637Z",
-    "updatedAt": "2016-02-18T03:48:35.824Z",
-    "favorited": false,
-    "favoritesCount": 0,
-    "author": {
-      "username": "jake",
-      "bio": "I work at statefarm",
-      "image": "https://i.stack.imgur.com/xHWG8.jpg",
-      "following": false
-    }
-  }, {
-    "slug": "how-to-train-your-dragon-2",
-    "title": "How to train your dragon 2",
-    "description": "So toothless",
-    "body": "It a dragon",
-    "tagList": ["dragons", "training"],
-    "createdAt": "2016-02-18T03:22:56.637Z",
-    "updatedAt": "2016-02-18T03:48:35.824Z",
-    "favorited": false,
-    "favoritesCount": 0,
-    "author": {
-      "username": "jake",
-      "bio": "I work at statefarm",
-      "image": "https://i.stack.imgur.com/xHWG8.jpg",
-      "following": false
-    }
-  }],
-  "articlesCount": 2
+    "notices": [
+        {
+            "slug": "notice-test-od43rg",
+            "title": "Notice test",
+            "description": "A test post",
+            "body": "Hey, we all love a good test.",
+            "comments": [],
+            "favoritesCount": 0,
+            "upVotesCount": 0,
+            "downVotesCount": 0,
+            "createdAt": "2019-09-25T18:35:33.421Z",
+            "updatedAt": "2019-09-25T18:35:33.421Z",
+            "tagList": [
+                "test",
+                "notice"
+            ],
+            "author": {
+                "username": "readme",
+                "image": "https://static.productionready.io/images/smiley-cyrus.jpg",
+                "address": "Buckingham Place, London",
+                "homeXCoord": 51.4989618,
+                "homeYCoord": -0.140317,
+                "id": "5d8baf9a2073e800240a0c83",
+                "following": false
+            },
+            "isFavorite": false,
+            "isUpVoted": false,
+            "isDownVoted": false,
+            "id": "5d8bb3752073e800240a0c85"
+        },
+        {
+            "slug": "how-to-write-a-readme-jz92lk",
+            "title": "How to write a readme",
+            "description": "Job Request",
+            "body": "Could anyone help me with writing a readme?",
+            "comments": [],
+            "favoritesCount": 0,
+            "upVotesCount": 0,
+            "downVotesCount": 0,
+            "createdAt": "2019-09-25T18:34:30.156Z",
+            "updatedAt": "2019-09-25T18:34:30.156Z",
+            "tagList": [
+                "readme",
+                "help"
+            ],
+            "author": {
+                "username": "readme",
+                "image": "https://static.productionready.io/images/smiley-cyrus.jpg",
+                "address": "Buckingham Place, London",
+                "homeXCoord": 51.4989618,
+                "homeYCoord": -0.140317,
+                "id": "5d8baf9a2073e800240a0c83",
+                "following": false
+            },
+            "isFavorite": false,
+            "isUpVoted": false,
+            "isDownVoted": false,
+            "id": "5d8bb3362073e800240a0c84"
+        }
+    ],
+    "noticesCount": 2
 }
 ```
 
@@ -108,18 +152,20 @@ Make sure the right content type like `Content-Type: application/json; charset=u
 
 ```JSON
 {
-  "comment": {
-    "id": 1,
-    "createdAt": "2016-02-18T03:22:56.637Z",
-    "updatedAt": "2016-02-18T03:22:56.637Z",
-    "body": "It takes a Jacobian",
-    "author": {
-      "username": "jake",
-      "bio": "I work at statefarm",
-      "image": "https://i.stack.imgur.com/xHWG8.jpg",
-      "following": false
+    "comment": {
+        "id": "5d8bb5e5118ce10024853d8b",
+        "body": "Commenting on your own posts is best.",
+        "createdAt": "2019-09-25T18:45:57.215Z",
+        "author": {
+            "username": "readme",
+            "image": "https://static.productionready.io/images/smiley-cyrus.jpg",
+            "address": "Buckingham Place, London",
+            "homeXCoord": 51.4989618,
+            "homeYCoord": -0.140317,
+            "id": "5d8baf9a2073e800240a0c83",
+            "following": false
+        }
     }
-  }
 }
 ```
 
@@ -127,18 +173,36 @@ Make sure the right content type like `Content-Type: application/json; charset=u
 
 ```JSON
 {
-  "comments": [{
-    "id": 1,
-    "createdAt": "2016-02-18T03:22:56.637Z",
-    "updatedAt": "2016-02-18T03:22:56.637Z",
-    "body": "It takes a Jacobian",
-    "author": {
-      "username": "jake",
-      "bio": "I work at statefarm",
-      "image": "https://i.stack.imgur.com/xHWG8.jpg",
-      "following": false
-    }
-  }]
+    "comments": [
+        {
+            "id": "5d8bb60a118ce10024853d8d",
+            "body": "And one more for good luck",
+            "createdAt": "2019-09-25T18:46:34.456Z",
+            "author": {
+                "username": "readme",
+                "image": "https://static.productionready.io/images/smiley-cyrus.jpg",
+                "address": "Buckingham Place, London",
+                "homeXCoord": 51.4989618,
+                "homeYCoord": -0.140317,
+                "id": "5d8baf9a2073e800240a0c83",
+                "following": false
+            }
+        },
+        {
+            "id": "5d8bb5e5118ce10024853d8b",
+            "body": "Commenting on your own posts is best.",
+            "createdAt": "2019-09-25T18:45:57.215Z",
+            "author": {
+                "username": "readme",
+                "image": "https://static.productionready.io/images/smiley-cyrus.jpg",
+                "address": "Buckingham Place, London",
+                "homeXCoord": 51.4989618,
+                "homeYCoord": -0.140317,
+                "id": "5d8baf9a2073e800240a0c83",
+                "following": false
+            }
+        }
+    ]
 }
 ```
 
@@ -147,8 +211,8 @@ Make sure the right content type like `Content-Type: application/json; charset=u
 ```JSON
 {
   "tags": [
-    "reactjs",
-    "angularjs"
+    "job",
+    "readme"
   ]
 }
 ```
