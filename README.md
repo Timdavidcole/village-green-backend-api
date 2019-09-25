@@ -484,21 +484,59 @@ Authentication required
 
 
 
-### Favorite Article
+### Favorite Notice
 
-`POST /api/articles/:slug/favorite`
+`POST /api/notices/:slug/favorite`
 
-Authentication required, returns the [Article](#single-article)
+Authentication required, returns the [Notice](#single-article)
 
 No additional parameters required
 
 
 
-### Unfavorite Article
+### Unfavorite Notice
 
-`DELETE /api/articles/:slug/favorite`
+`DELETE /api/notices/:slug/favorite`
 
-Authentication required, returns the [Article](#single-article)
+Authentication required, returns the [Notice](#single-article)
+
+No additional parameters required
+
+
+### Upvote Notice
+
+`POST /api/notices/:slug/upvote`
+
+Authentication required, returns the [Notice](#single-article)
+
+No additional parameters required
+
+
+
+### Unupvote Notice
+
+`DELETE /api/notices/:slug/upvote`
+
+Authentication required, returns the [Notice](#single-article)
+
+No additional parameters required
+
+
+### Downvote Notice
+
+`POST /api/notices/:slug/downvote`
+
+Authentication required, returns the [Notice](#single-article)
+
+No additional parameters required
+
+
+
+### Undownvote Notice
+
+`DELETE /api/notices/:slug/downvote`
+
+Authentication required, returns the [Notice](#single-article)
 
 No additional parameters required
 
