@@ -1,6 +1,6 @@
 # village-green-backend-api
 
-Welcome to the backend API for Village Green.  The Noticeboard App.  This was built using Node.js and Express, and currently hosted on Heroku, although I'm looking to get it up on AWS asap.
+Welcome to the backend API for Village Green.  The Noticeboard App.  This was built using Node.js and Express, and currently hosted on Heroku, although I'm looking to get it up on AWS asap.  There are some google maps API calls in there so please don't spam user creation!
 
 URL Root: `https://village-green-backend-api.herokuapp.com`
 
@@ -448,9 +448,9 @@ Authentication required
 
 
 
-### Add Comments to an Article
+### Add Comments to a Notice
 
-`POST /api/articles/:slug/comments`
+`POST /api/notices/:slug/comments`
 
 Example request body:
 
@@ -468,9 +468,9 @@ Required field: `body`
 
 
 
-### Get Comments from an Article
+### Get Comments from a Notice
 
-`GET /api/articles/:slug/comments`
+`GET /api/notices/:slug/comments`
 
 Authentication optional, returns [multiple comments](#multiple-comments)
 
@@ -478,7 +478,7 @@ Authentication optional, returns [multiple comments](#multiple-comments)
 
 ### Delete Comment
 
-`DELETE /api/articles/:slug/comments/:id`
+`DELETE /api/notices/:slug/comments/:id`
 
 Authentication required
 
