@@ -6,17 +6,15 @@ URL Root: `https://village-green-backend-api.herokuapp.com`
 
 Many thanks to this [Thinkster walkthrough](https://thinkster.io/tutorials/node-json-api), which I used significantly in the creation of this API.  
 
-## Considerations for your backend with [CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
+## Usage
+
+Well if you fancy using it to build your own front-end knock yourself out.  But just playing around with some calls in the excellent [Postman](https://www.getpostman.com/) is good way to have a rummage.
 
 If the backend is about to run on a different host/port than the frontend, make sure to handle `OPTIONS` too and return correct `Access-Control-Allow-Origin` and `Access-Control-Allow-Headers` (e.g. `Content-Type`).
 
 ### Authentication Header:
 
 `Authorization: Token jwt.token.here`
-
-## Usage
-
-Well if you fancy using it to build your own front-end knock yourself out.  But just playing around with some calls in the excellent [Postman](https://www.getpostman.com/) is good way to have a rummage.
 
 ### Example Call
 
