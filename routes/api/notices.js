@@ -299,7 +299,7 @@ router.post('/:notice/favorite', auth.required, function(req, res, next) {
   }).catch(next);
 });
 
-router.post('/:notice/upVote', auth.required, function(req, res, next) {
+router.post('/:notice/upvote', auth.required, function(req, res, next) {
   var noticeId = req.notice._id;
 
   User.findById(req.payload.id).then(function(user) {
@@ -318,7 +318,7 @@ router.post('/:notice/upVote', auth.required, function(req, res, next) {
   }).catch(next);
 });
 
-router.post('/:notice/downVote', auth.required, function(req, res, next) {
+router.post('/:notice/downvote', auth.required, function(req, res, next) {
   var noticeId = req.notice._id;
 
   User.findById(req.payload.id).then(function(user) {
@@ -355,7 +355,7 @@ router.delete('/:notice/favorite', auth.required, function(req, res, next) {
   }).catch(next);
 });
 
-router.delete('/:notice/upVote', auth.required, function(req, res, next) {
+router.delete('/:notice/upvote', auth.required, function(req, res, next) {
   var noticeId = req.notice._id;
 
   User.findById(req.payload.id).then(function(user) {
@@ -373,7 +373,7 @@ router.delete('/:notice/upVote', auth.required, function(req, res, next) {
   }).catch(next);
 });
 
-router.delete('/:notice/downVote', auth.required, function(req, res, next) {
+router.delete('/:notice/downvote', auth.required, function(req, res, next) {
   var noticeId = req.notice._id;
 
   User.findById(req.payload.id).then(function(user) {
