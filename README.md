@@ -4,8 +4,6 @@ Welcome to the backend API for Village Green: The Local Noticeboard App.  This w
 
 URL Root: `https://village-green-backend-api.herokuapp.com`
 
-Many thanks to this [Thinkster walkthrough](https://thinkster.io/tutorials/node-json-api), which I used significantly in the creation of this API.  
-
 ## Usage
 
 Well if you fancy using it to build your own front-end knock yourself out.  But just playing around with some calls in the excellent [Postman](https://www.getpostman.com/) is good way to have a rummage.
