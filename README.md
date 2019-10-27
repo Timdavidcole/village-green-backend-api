@@ -4,7 +4,7 @@ Welcome to the backend API for Village Green: The Local Noticeboard App.  This w
 
 URL Root: `https://village-green-backend-api.herokuapp.com`
 
-Many thanks to this [Thinkster walkthrough](https://thinkster.io/tutorials/node-json-api), which I used significantly in the creation of this API.  
+Many thanks to this [Thinkster walkthrough](https://thinkster.io/tutorials/node-json-api), which I used in the creation of this API, especially in the setting up of JWT authorization.  
 
 ## Usage
 
