@@ -10,10 +10,7 @@ var fs = require('fs'),
   errorhandler = require('errorhandler'),
   mongoose = require('mongoose');
 
-var isProduction = true;
-console.log("isProduction")
-
-console.log(isProduction)
+var isProduction = process.env.NODE_ENV === 'production';
 
 // Create global app object
 var app = express();
