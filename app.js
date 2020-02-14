@@ -10,7 +10,7 @@ var fs = require('fs'),
   errorhandler = require('errorhandler'),
   mongoose = require('mongoose');
 
-var isProduction = process.env.NODE_ENV === 'production';
+var isProduction = true;
 
 // Create global app object
 var app = express();
@@ -44,12 +44,14 @@ if (isProduction) {
   const uri = "mongodb+srv://tim:chuckles1@village-green-api-6cbik.mongodb.net/test?retryWrites=true&w=majority";
   mongoose.connect(uri, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true
   });
 } else {
   mongoose.connect('mongodb://localhost/village-green', {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true
   });
   mongoose.set('debug', true);
 }
