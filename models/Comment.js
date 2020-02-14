@@ -1,6 +1,4 @@
 var mongoose = require('mongoose');
-var User = mongoose.model('User');
-
 
 var CommentSchema = new mongoose.Schema({
   body: String,
