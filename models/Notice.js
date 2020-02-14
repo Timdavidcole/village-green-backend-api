@@ -1,54 +1,64 @@
-var mongoose = require('mongoose');
-var uniqueValidator = require('mongoose-unique-validator');
-var slug = require('slug'); // package we'll use to auto create URL slugs
-var User = mongoose.model('User');
+var mongoose = require("mongoose");
+var uniqueValidator = require("mongoose-unique-validator");
+var slug = require("slug"); // package we'll use to auto create URL slugs
+var User = mongoose.model("User");
 
-var NoticeSchema = new mongoose.Schema({
-  slug: {
-    type: String,
-    lowercase: true,
-    unique: true
+var NoticeSchema = new mongoose.Schema(
+  {
+    slug: {
+      type: String,
+      lowercase: true,
+      unique: true
+    },
+    title: String,
+    description: String,
+    body: String,
+    image: String,
+    comments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment"
+      }
+    ],
+    favoritesCount: {
+      type: Number,
+      default: 0
+    },
+    upVotesCount: {
+      type: Number,
+      default: 0
+    },
+    downVotesCount: {
+      type: Number,
+      default: 0
+    },
+    tagList: [
+      {
+        type: String
+      }
+    ],
+    author: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    }
   },
-  title: String,
-  description: String,
-  body: String,
-  image: String,
-  comments: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Comment'
-  }],
-  favoritesCount: {
-    type: Number,
-    default: 0
-  },
-  upVotesCount: {
-    type: Number,
-    default: 0
-  },
-  downVotesCount: {
-    type: Number,
-    default: 0
-  },
-  tagList: [{
-    type: String
-  }],
-  author: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+  {
+    timestamps: true
   }
-}, {
-  timestamps: true
-});
+);
 
 NoticeSchema.plugin(uniqueValidator, {
-  message: 'is already taken'
+  message: "is already taken"
 });
 
 NoticeSchema.methods.slugify = function() {
-  this.slug = slug(this.title) + '-' + (Math.random() * Math.pow(36, 6) | 0).toString(36);
+  this.slug =
+    slug(this.title) +
+    "-" +
+    ((Math.random() * Math.pow(36, 6)) | 0).toString(36);
 };
 
-NoticeSchema.pre('validate', function(next) {
+NoticeSchema.pre("validate", function(next) {
   if (!this.slug) {
     this.slugify();
   }
@@ -72,14 +82,13 @@ NoticeSchema.methods.updateFavoriteCount = function() {
 
 NoticeSchema.methods.updateUpVoteCount = function() {
   var notice = this;
-  console.log('running updateUpVoteCount')
+  console.log("running updateUpVoteCount");
 
   return User.count({
     upVoted: {
       $in: [notice._id]
     }
   }).then(function(count) {
-    console.log(count)
     notice.upVotesCount = count;
 
     return notice.save();
@@ -94,7 +103,6 @@ NoticeSchema.methods.updateDownVoteCount = function() {
       $in: [notice._id]
     }
   }).then(function(count) {
-    console.log(count)
     notice.downVotesCount = count;
 
     return notice.save();
@@ -102,7 +110,6 @@ NoticeSchema.methods.updateDownVoteCount = function() {
 };
 
 NoticeSchema.methods.toJSONFor = function(user) {
-  console.log(this.author)
   return {
     slug: this.slug,
     title: this.title,
@@ -124,4 +131,4 @@ NoticeSchema.methods.toJSONFor = function(user) {
   };
 };
 
-mongoose.model('Notice', NoticeSchema);
+mongoose.model("Notice", NoticeSchema);
