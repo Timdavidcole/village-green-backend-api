@@ -14,6 +14,10 @@ router.get("/", auth.optional, function(req, res, next) {
     limit = req.query.limit;
   }
 
+  if (typeof req.query.coords !== "undefined") {
+    coords = JSON.parse(req.query.coords);
+  }
+
   if (typeof req.query.offset !== "undefined") {
     offset = req.query.offset;
   }
@@ -54,8 +58,21 @@ router.get("/", auth.optional, function(req, res, next) {
         };
       }
 
+      console.log(coords);
+
       return Promise.all([
-        Notice.find(query)
+        Notice.find({
+          author: {
+            location: {
+              $near: {
+                $geometry: {
+                  type: "Point",
+                  coordinates: [coords.lat, coords.lng]
+                }
+                            }
+            }
+          }
+        })
           .limit(Number(limit))
           .skip(Number(offset))
           .sort({
@@ -69,6 +86,7 @@ router.get("/", auth.optional, function(req, res, next) {
         var notices = results[0];
         var noticesCount = results[1];
         var user = results[2];
+        console.log(notices[0])
 
         return res.json({
           notices: notices.map(function(notice) {
@@ -269,7 +287,6 @@ router.delete("/:notice/comments/:comment", auth.required, function(
   res,
   next
 ) {
-  console.log(req.comment.author);
   if (req.comment.author.toString() === req.payload.id.toString()) {
     req.notice.comments.remove(req.comment._id);
     req.notice
