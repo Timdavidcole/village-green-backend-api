@@ -69,7 +69,7 @@ NoticeSchema.pre("validate", function(next) {
 NoticeSchema.methods.updateFavoriteCount = function() {
   var notice = this;
 
-  return User.count({
+  return User.countDocuments({
     favorites: {
       $in: [notice._id]
     }
@@ -84,7 +84,7 @@ NoticeSchema.methods.updateUpVoteCount = function() {
   var notice = this;
   console.log("running updateUpVoteCount");
 
-  return User.count({
+  return User.countDocuments({
     upVoted: {
       $in: [notice._id]
     }
@@ -98,7 +98,7 @@ NoticeSchema.methods.updateUpVoteCount = function() {
 NoticeSchema.methods.updateDownVoteCount = function() {
   var notice = this;
 
-  return User.count({
+  return User.countDocuments({
     downVoted: {
       $in: [notice._id]
     }

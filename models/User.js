@@ -26,8 +26,17 @@ var UserSchema = new mongoose.Schema({
   },
   address: String,
   bio: String,
-  homeXCoord: Number,
-  homeYCoord: Number,
+  location: {
+    type: {
+      type: String, // Don't do `{ location: { type: String } }`
+      enum: ['Point'], // 'location.type' must be 'Point'
+      required: true
+    },
+    coordinates: {
+      type: [Number],
+      required: true
+    }
+  },
   dob: String,
   image: String,
   favorites: [{
@@ -77,8 +86,7 @@ UserSchema.methods.toAuthJSON = function() {
     bio: this.bio,
     image: this.image || 'https://static.productionready.io/images/smiley-cyrus.jpg',
     address: this.address,
-    homeXCoord: this.homeXCoord,
-    homeYCoord: this.homeYCoord,
+    location: this.location,
     id: this._id,
   };
 };
@@ -89,8 +97,7 @@ UserSchema.methods.toProfileJSONFor = function(user) {
     bio: this.bio,
     image: this.image || 'https://static.productionready.io/images/smiley-cyrus.jpg',
     address: this.address,
-    homeXCoord: this.homeXCoord,
-    homeYCoord: this.homeYCoord,
+    location: this.location,
     id: this._id,
     following: false // we'll implement following functionality in a few chapters :)
   };

@@ -10,7 +10,7 @@ var fs = require('fs'),
   errorhandler = require('errorhandler'),
   mongoose = require('mongoose');
 
-var isProduction = true;
+var isProduction = process.env.NODE_ENV === 'production';
 
 // Create global app object
 var app = express();
@@ -48,7 +48,7 @@ if (isProduction) {
     useCreateIndex: true
   });
 } else {
-  mongoose.connect('mongodb://localhost/village-green', {
+  mongoose.connect('mongodb://localhost:27017/village-green', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true
