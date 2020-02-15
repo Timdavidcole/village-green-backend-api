@@ -28,8 +28,8 @@ var UserSchema = new mongoose.Schema({
   bio: String,
   location: {
     type: {
-      type: String, // Don't do `{ location: { type: String } }`
-      enum: ['Point'], // 'location.type' must be 'Point'
+      type: String,
+      enum: ['Point'],
       required: true
     },
     coordinates: {
@@ -99,7 +99,7 @@ UserSchema.methods.toProfileJSONFor = function(user) {
     address: this.address,
     location: this.location,
     id: this._id,
-    following: false // we'll implement following functionality in a few chapters :)
+    following: false
   };
 };
 
