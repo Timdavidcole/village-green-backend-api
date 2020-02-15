@@ -27,6 +27,8 @@ router.post("/users", function(req, res, next) {
     })
     .then(date => {
       user.save().then(function() {
+        console.log("user.location.coordinates")
+        console.log(user.location.coordinates)
         return res.json({
           user: user.toAuthJSON()
         });
@@ -63,6 +65,8 @@ router.post("/users/login", function(req, res, next) {
       }
 
       if (user) {
+        console.log("user.location.coordinates")
+        console.log(user.location.coordinates)
         user.token = user.generateJWT();
         return res.json({
           user: user.toAuthJSON()
@@ -80,6 +84,8 @@ router.get("/user", auth.required, function(req, res, next) {
       if (!user) {
         return res.sendStatus(401);
       }
+      console.log("user.location.coordinates")
+      console.log(user.location.coordinates)
 
       return res.json({
         user: user.toAuthJSON()

@@ -1,69 +1,77 @@
-var mongoose = require('mongoose');
-var uniqueValidator = require('mongoose-unique-validator');
-var crypto = require('crypto');
-var jwt = require('jsonwebtoken');
-var secret = require('../config').secret;
+var mongoose = require("mongoose");
+var uniqueValidator = require("mongoose-unique-validator");
+var crypto = require("crypto");
+var jwt = require("jsonwebtoken");
+var secret = require("../config").secret;
 
-console.log("USER MODEL IS BEING READ")
+console.log("USER MODEL IS BEING READ");
 
-var UserSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    lowercase: true,
-    unique: true,
-    required: [true, "can't be blank"],
-    match: [/^[a-zA-Z0-9]+$/, 'is invalid'],
-    index: true
-  },
-  name: String,
-  email: {
-    type: String,
-    lowercase: true,
-    unique: true,
-    required: [true, "can't be blank"],
-    match: [/\S+@\S+\.\S+/, 'is invalid'],
-    index: true
-  },
-  address: String,
-  bio: String,
-  location: {
-    type: {
+var UserSchema = new mongoose.Schema(
+  {
+    username: {
       type: String,
-      enum: ['Point'],
-      required: true
+      lowercase: true,
+      unique: true,
+      required: [true, "can't be blank"],
+      match: [/^[a-zA-Z0-9]+$/, "is invalid"],
+      index: true
     },
-    coordinates: {
-      type: [Number],
-      required: true
-    }
+    name: String,
+    email: {
+      type: String,
+      lowercase: true,
+      unique: true,
+      required: [true, "can't be blank"],
+      match: [/\S+@\S+\.\S+/, "is invalid"],
+      index: true
+    },
+    address: String,
+    bio: String,
+    location: {
+      type: { type: String },
+      coordinates: []
+    },
+    dob: String,
+    image: String,
+    favorites: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Notice"
+      }
+    ],
+    upVoted: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Notice"
+      }
+    ],
+    downVoted: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Notice"
+      }
+    ],
+    hash: String,
+    salt: String
   },
-  dob: String,
-  image: String,
-  favorites: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Notice'
-  }],
-  upVoted: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Notice'
-  }],
-  downVoted: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Notice'
-  }],
-  hash: String,
-  salt: String
-}, {
-  timestamps: true
-});
+  {
+    timestamps: true
+  }
+);
+
+UserSchema.index({ location: "2dsphere" });
 
 UserSchema.methods.setPassword = function(password) {
-  this.salt = crypto.randomBytes(16).toString('hex');
-  this.hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
+  this.salt = crypto.randomBytes(16).toString("hex");
+  this.hash = crypto
+    .pbkdf2Sync(password, this.salt, 10000, 512, "sha512")
+    .toString("hex");
 };
 
 UserSchema.methods.validPassword = function(password) {
-  var hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
+  var hash = crypto
+    .pbkdf2Sync(password, this.salt, 10000, 512, "sha512")
+    .toString("hex");
   return this.hash === hash;
 };
 
@@ -71,11 +79,14 @@ UserSchema.methods.generateJWT = function() {
   var today = new Date();
   var exp = new Date(today);
   exp.setDate(today.getDate() + 60);
-  return jwt.sign({
-    id: this._id,
-    username: this.username,
-    exp: parseInt(exp.getTime() / 1000),
-  }, secret);
+  return jwt.sign(
+    {
+      id: this._id,
+      username: this.username,
+      exp: parseInt(exp.getTime() / 1000)
+    },
+    secret
+  );
 };
 
 UserSchema.methods.toAuthJSON = function() {
@@ -84,10 +95,11 @@ UserSchema.methods.toAuthJSON = function() {
     email: this.email,
     token: this.generateJWT(),
     bio: this.bio,
-    image: this.image || 'https://static.productionready.io/images/smiley-cyrus.jpg',
+    image:
+      this.image || "https://static.productionready.io/images/smiley-cyrus.jpg",
     address: this.address,
     location: this.location,
-    id: this._id,
+    id: this._id
   };
 };
 
@@ -95,7 +107,8 @@ UserSchema.methods.toProfileJSONFor = function(user) {
   return {
     username: this.username,
     bio: this.bio,
-    image: this.image || 'https://static.productionready.io/images/smiley-cyrus.jpg',
+    image:
+      this.image || "https://static.productionready.io/images/smiley-cyrus.jpg",
     address: this.address,
     location: this.location,
     id: this._id,
@@ -160,9 +173,8 @@ UserSchema.methods.isDownVoted = function(id) {
   });
 };
 
-
 UserSchema.plugin(uniqueValidator, {
-  message: 'is already taken.'
+  message: "is already taken."
 });
 
-mongoose.model('User', UserSchema);
+mongoose.model("User", UserSchema);

@@ -40,12 +40,19 @@ var NoticeSchema = new mongoose.Schema(
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User"
+    },
+    location: {
+      type: { type: String },
+      coordinates: []
     }
   },
   {
     timestamps: true
   }
 );
+
+NoticeSchema.index({ location: "2dsphere" });
+
 
 NoticeSchema.plugin(uniqueValidator, {
   message: "is already taken"
@@ -127,7 +134,8 @@ NoticeSchema.methods.toJSONFor = function(user) {
     isFavorite: user ? user.isFavorite(this._id) : false,
     isUpVoted: user ? user.isUpVoted(this._id) : false,
     isDownVoted: user ? user.isDownVoted(this._id) : false,
-    id: this._id
+    id: this._id,
+    location: this.location,
   };
 };
 

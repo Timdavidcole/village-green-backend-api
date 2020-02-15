@@ -57,27 +57,22 @@ router.get("/", auth.optional, function(req, res, next) {
           $in: []
         };
       }
-
+      console.log("coords");
       console.log(coords);
 
       return Promise.all([
         Notice.find({
-          author: {
-            location: {
-              $near: {
-                $geometry: {
-                  type: "Point",
-                  coordinates: [coords.lat, coords.lng]
-                }
-                            }
+          location: {
+            $near: {
+              $geometry: {
+                type: "Point",
+                coordinates: [coords.lng, coords.lat]
+              }
             }
           }
         })
           .limit(Number(limit))
           .skip(Number(offset))
-          .sort({
-            createdAt: "desc"
-          })
           .populate("author")
           .exec(),
         Notice.count(query).exec(),
@@ -86,7 +81,8 @@ router.get("/", auth.optional, function(req, res, next) {
         var notices = results[0];
         var noticesCount = results[1];
         var user = results[2];
-        console.log(notices[0])
+        console.log("notices[0].location.coordinates");
+        console.log(notices[0].location.coordinates);
 
         return res.json({
           notices: notices.map(function(notice) {
@@ -157,6 +153,7 @@ router.post("/", auth.required, function(req, res, next) {
       var notice = new Notice(req.body.notice);
 
       notice.author = user;
+      notice.location = user.location;
 
       return notice.save().then(function() {
         return res.json({
