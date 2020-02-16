@@ -16,7 +16,7 @@ router.get("/", auth.optional, function(req, res, next) {
 
   if (typeof req.query.coords !== "undefined") {
     coords = JSON.parse(req.query.coords);
-  }
+  } else coords = { lat: 51.508402, lng: -0.126326 }
 
   if (typeof req.query.offset !== "undefined") {
     offset = req.query.offset;
@@ -57,8 +57,6 @@ router.get("/", auth.optional, function(req, res, next) {
           $in: []
         };
       }
-      console.log("coords");
-      console.log(coords);
 
       return Promise.all([
         Notice.find({
@@ -81,9 +79,6 @@ router.get("/", auth.optional, function(req, res, next) {
         var notices = results[0];
         var noticesCount = results[1];
         var user = results[2];
-        console.log("notices[0].location.coordinates");
-        console.log(notices[0]);
-        console.log(notices[0].location.coordinates);
 
         return res.json({
           notices: notices.map(function(notice) {
