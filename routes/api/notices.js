@@ -66,7 +66,7 @@ router.get("/", auth.optional, function(req, res, next) {
             $near: {
               $geometry: {
                 type: "Point",
-                coordinates: [coords.lng, coords.lat]
+                coordinates: [coords.lat, coords.lng]
               }
             }
           }
@@ -82,6 +82,7 @@ router.get("/", auth.optional, function(req, res, next) {
         var noticesCount = results[1];
         var user = results[2];
         console.log("notices[0].location.coordinates");
+        console.log(notices[0]);
         console.log(notices[0].location.coordinates);
 
         return res.json({
@@ -153,7 +154,13 @@ router.post("/", auth.required, function(req, res, next) {
       var notice = new Notice(req.body.notice);
 
       notice.author = user;
-      notice.location = user.location;
+      notice.location = {
+        type: "Point",
+        coordinates: [
+          user.location.coordinates[0],
+          user.location.coordinates[1]
+        ]
+      }
 
       return notice.save().then(function() {
         return res.json({
