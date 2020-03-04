@@ -33,7 +33,7 @@ var UserSchema = new mongoose.Schema(
     },
     dob: String,
     image: String,
-    favorites: [
+    pinned: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Notice"
@@ -116,22 +116,22 @@ UserSchema.methods.toProfileJSONFor = function(user) {
   };
 };
 
-UserSchema.methods.favorite = function(id) {
-  if (this.favorites.indexOf(id) === -1) {
-    this.favorites.push(id);
+UserSchema.methods.pin = function(id) {
+  if (this.pinned.indexOf(id) === -1) {
+    this.pinned.push(id);
   }
 
   return this.save();
 };
 
-UserSchema.methods.unfavorite = function(id) {
-  this.favorites.remove(id);
+UserSchema.methods.unpin = function(id) {
+  this.pinned.remove(id);
   return this.save();
 };
 
-UserSchema.methods.isFavorite = function(id) {
-  return this.favorites.some(function(favoriteId) {
-    return favoriteId.toString() === id.toString();
+UserSchema.methods.isPinned = function(id) {
+  return this.pinned.some(function(pinId) {
+    return pinId.toString() === id.toString();
   });
 };
 

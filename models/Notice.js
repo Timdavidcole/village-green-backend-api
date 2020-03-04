@@ -20,7 +20,7 @@ var NoticeSchema = new mongoose.Schema(
         ref: "Comment"
       }
     ],
-    favoritesCount: {
+    pinCount: {
       type: Number,
       default: 0
     },
@@ -73,15 +73,15 @@ NoticeSchema.pre("validate", function(next) {
   next();
 });
 
-NoticeSchema.methods.updateFavoriteCount = function() {
+NoticeSchema.methods.updatePinCount = function() {
   var notice = this;
 
   return User.countDocuments({
-    favorites: {
+    pinned: {
       $in: [notice._id]
     }
   }).then(function(count) {
-    notice.favoritesCount = count;
+    notice.pinnedCount = count;
 
     return notice.save();
   });
@@ -124,14 +124,14 @@ NoticeSchema.methods.toJSONFor = function(user) {
     body: this.body,
     image: this.image,
     comments: this.comments,
-    favoritesCount: this.favoritesCount,
+    pinnedCount: this.pinnedCount,
     upVotesCount: this.upVotesCount,
     downVotesCount: this.downVotesCount,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
     tagList: this.tagList,
     author: this.author.toProfileJSONFor(user),
-    isFavorite: user ? user.isFavorite(this._id) : false,
+    isPinned: user ? user.isPinned(this._id) : false,
     isUpVoted: user ? user.isUpVoted(this._id) : false,
     isDownVoted: user ? user.isDownVoted(this._id) : false,
     id: this._id,

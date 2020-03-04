@@ -34,25 +34,25 @@ router.get("/", auth.optional, function(req, res, next) {
           username: req.query.author
         })
       : null,
-    req.query.favorited
+    req.query.pinned
       ? User.findOne({
-          username: req.query.favorited
+          username: req.query.pinned
         })
       : null
   ])
     .then(function(results) {
       var author = results[0];
-      var favoriter = results[1];
+      var pinner = results[1];
 
       if (author) {
         query.author = author._id;
       }
 
-      if (favoriter) {
+      if (pinner) {
         query._id = {
-          $in: favoriter.favorites
+          $in: pinner.pinned
         };
-      } else if (req.query.favorited) {
+      } else if (req.query.pinned) {
         query._id = {
           $in: []
         };
@@ -332,7 +332,7 @@ router.put("/:notice/comments/:comment", auth.required, function(
   });
 });
 
-router.post("/:notice/favorite", auth.required, function(req, res, next) {
+router.post("/:notice/pin", auth.required, function(req, res, next) {
   var noticeId = req.notice._id;
 
   User.findById(req.payload.id)
@@ -341,8 +341,8 @@ router.post("/:notice/favorite", auth.required, function(req, res, next) {
         return res.sendStatus(401);
       }
 
-      return user.favorite(noticeId).then(function() {
-        return req.notice.updateFavoriteCount().then(function(notice) {
+      return user.pin(noticeId).then(function() {
+        return req.notice.updatePinCount().then(function(notice) {
           return res.json({
             notice: notice.toJSONFor(user)
           });
@@ -392,7 +392,7 @@ router.post("/:notice/downvote", auth.required, function(req, res, next) {
     .catch(next);
 });
 
-router.delete("/:notice/favorite", auth.required, function(req, res, next) {
+router.delete("/:notice/pin", auth.required, function(req, res, next) {
   var noticeId = req.notice._id;
 
   User.findById(req.payload.id)
@@ -401,8 +401,8 @@ router.delete("/:notice/favorite", auth.required, function(req, res, next) {
         return res.sendStatus(401);
       }
 
-      return user.unfavorite(noticeId).then(function() {
-        return req.notice.updateFavoriteCount().then(function(notice) {
+      return user.unpin(noticeId).then(function() {
+        return req.notice.updatePinCount().then(function(notice) {
           return res.json({
             notice: notice.toJSONFor(user)
           });
