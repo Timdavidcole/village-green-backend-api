@@ -24,7 +24,7 @@ router.post("/users", function(req, res, next) {
         ]
       };
     })
-    .then(date => {
+    .then(data => {
       user.save().then(function() {
         return res.json({
           user: user.toAuthJSON()

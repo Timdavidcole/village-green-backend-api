@@ -4,8 +4,6 @@ var crypto = require("crypto");
 var jwt = require("jsonwebtoken");
 var secret = require("../config").secret;
 
-console.log("USER MODEL IS BEING READ");
-
 var UserSchema = new mongoose.Schema(
   {
     username: {

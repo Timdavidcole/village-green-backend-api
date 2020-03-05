@@ -27,7 +27,9 @@ router.get("/", auth.optional, function(req, res, next) {
       $in: [req.query.tag]
     };
   }
-  console.log(req.query);
+  console.log('req.payload')
+
+  console.log(req.payload)
 
   Promise.all([
     req.query.author
@@ -50,7 +52,6 @@ router.get("/", auth.optional, function(req, res, next) {
       }
 
       if (pinner) {
-
         query._id = {
           $in: pinner.pinned
         };
@@ -61,11 +62,6 @@ router.get("/", auth.optional, function(req, res, next) {
       }
 
       if (pinner) {
-        console.log("QUERY")
-        console.log(pinner)
-        console.log(query._id);
-        console.log(query);
-
         return Promise.all([
           Notice.find()
             .where("_id")
@@ -77,14 +73,10 @@ router.get("/", auth.optional, function(req, res, next) {
           Notice.countDocuments(query).exec(),
           req.payload ? User.findById(req.payload.id) : null
         ]).then(function(results) {
-          console.log('results')
-          console.log(results)
           var notices = results[0];
           var noticesCount = results[1];
           var user = results[2];
-          console.log("NOTICES");
-
-          console.log(notices);
+          
           return res.json({
             notices: notices.map(function(notice) {
               return notice.toJSONFor(user);
@@ -114,6 +106,7 @@ router.get("/", auth.optional, function(req, res, next) {
           var notices = results[0];
           var noticesCount = results[1];
           var user = results[2];
+
           return res.json({
             notices: notices.map(function(notice) {
               return notice.toJSONFor(user);
