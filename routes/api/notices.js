@@ -16,7 +16,7 @@ router.get("/", auth.optional, function(req, res, next) {
 
   if (typeof req.query.coords !== "undefined") {
     coords = JSON.parse(req.query.coords);
-  } else coords = { lat: 51.508402, lng: -0.126326 }
+  } else coords = { lat: 51.508402, lng: -0.126326 };
 
   if (typeof req.query.offset !== "undefined") {
     offset = req.query.offset;
@@ -27,6 +27,7 @@ router.get("/", auth.optional, function(req, res, next) {
       $in: [req.query.tag]
     };
   }
+  console.log(req.query);
 
   Promise.all([
     req.query.author
@@ -49,6 +50,7 @@ router.get("/", auth.optional, function(req, res, next) {
       }
 
       if (pinner) {
+
         query._id = {
           $in: pinner.pinned
         };
@@ -58,35 +60,68 @@ router.get("/", auth.optional, function(req, res, next) {
         };
       }
 
-      return Promise.all([
-        Notice.find({
-          location: {
-            $near: {
-              $geometry: {
-                type: "Point",
-                coordinates: [coords.lat, coords.lng]
+      if (pinner) {
+        console.log("QUERY")
+        console.log(pinner)
+        console.log(query._id);
+        console.log(query);
+
+        return Promise.all([
+          Notice.find()
+            .where("_id")
+            .in(pinner.pinned)
+            .limit(Number(limit))
+            .skip(Number(offset))
+            .populate("author")
+            .exec(),
+          Notice.countDocuments(query).exec(),
+          req.payload ? User.findById(req.payload.id) : null
+        ]).then(function(results) {
+          console.log('results')
+          console.log(results)
+          var notices = results[0];
+          var noticesCount = results[1];
+          var user = results[2];
+          console.log("NOTICES");
+
+          console.log(notices);
+          return res.json({
+            notices: notices.map(function(notice) {
+              return notice.toJSONFor(user);
+            }),
+            noticesCount: noticesCount
+          });
+        });
+      } else {
+        return Promise.all([
+          Notice.find({
+            location: {
+              $near: {
+                $geometry: {
+                  type: "Point",
+                  coordinates: [coords.lat, coords.lng]
+                }
               }
             }
-          }
-        })
-          .limit(Number(limit))
-          .skip(Number(offset))
-          .populate("author")
-          .exec(),
-        Notice.count(query).exec(),
-        req.payload ? User.findById(req.payload.id) : null
-      ]).then(function(results) {
-        var notices = results[0];
-        var noticesCount = results[1];
-        var user = results[2];
-
-        return res.json({
-          notices: notices.map(function(notice) {
-            return notice.toJSONFor(user);
-          }),
-          noticesCount: noticesCount
+          })
+            .limit(Number(limit))
+            .skip(Number(offset))
+            .populate("author")
+            .exec(),
+          Notice.countDocuments(query).exec(),
+          req.payload ? User.findById(req.payload.id) : null
+        ]).then(function(results) {
+          var notices = results[0];
+          var noticesCount = results[1];
+          var user = results[2];
+          return res.json({
+            notices: notices.map(function(notice) {
+              return notice.toJSONFor(user);
+            }),
+            noticesCount: noticesCount
+          });
         });
-      });
+      }
     })
     .catch(next);
 });
@@ -155,7 +190,7 @@ router.post("/", auth.required, function(req, res, next) {
           user.location.coordinates[0],
           user.location.coordinates[1]
         ]
-      }
+      };
 
       return notice.save().then(function() {
         return res.json({
