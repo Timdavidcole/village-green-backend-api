@@ -27,9 +27,6 @@ router.get("/", auth.optional, function(req, res, next) {
       $in: [req.query.tag]
     };
   }
-  console.log('req.payload')
-
-  console.log(req.payload)
 
   Promise.all([
     req.query.author
