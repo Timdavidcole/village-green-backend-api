@@ -89,7 +89,6 @@ NoticeSchema.methods.updatePinCount = function() {
 
 NoticeSchema.methods.updateUpVoteCount = function() {
   var notice = this;
-  console.log("running updateUpVoteCount");
 
   return User.countDocuments({
     upVoted: {
@@ -117,7 +116,6 @@ NoticeSchema.methods.updateDownVoteCount = function() {
 };
 
 NoticeSchema.methods.toJSONFor = function(user) {
-  console.log(user)
   return {
     slug: this.slug,
     title: this.title,

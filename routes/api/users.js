@@ -13,6 +13,7 @@ router.post("/users", function(req, res, next) {
   user.setPassword(req.body.user.password);
   user.address = req.body.user.address;
 
+
   geocoding
     .getCoordinates(user.address)
     .then(data => {
