@@ -43,7 +43,6 @@ router.get("/", auth.optional, function(req, res, next) {
     .then(function(results) {
       var author = results[0];
       var pinner = results[1];
-
       if (author) {
         query.author = author._id;
       }
@@ -57,7 +56,6 @@ router.get("/", auth.optional, function(req, res, next) {
           $in: []
         };
       }
-
       if (pinner) {
         return Promise.all([
           Notice.find()
@@ -73,7 +71,6 @@ router.get("/", auth.optional, function(req, res, next) {
           var notices = results[0];
           var noticesCount = results[1];
           var user = results[2];
-          
           return res.json({
             notices: notices.map(function(notice) {
               return notice.toJSONFor(user);
@@ -88,7 +85,7 @@ router.get("/", auth.optional, function(req, res, next) {
               $near: {
                 $geometry: {
                   type: "Point",
-                  coordinates: [coords.lat, coords.lng]
+                  coordinates: [coords.lng, coords.lat]
                 }
               }
             }
@@ -100,10 +97,10 @@ router.get("/", auth.optional, function(req, res, next) {
           Notice.countDocuments(query).exec(),
           req.payload ? User.findById(req.payload.id) : null
         ]).then(function(results) {
+
           var notices = results[0];
           var noticesCount = results[1];
           var user = results[2];
-
           return res.json({
             notices: notices.map(function(notice) {
               return notice.toJSONFor(user);
