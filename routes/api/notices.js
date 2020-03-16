@@ -169,7 +169,8 @@ router.post("/", auth.required, function(req, res, next) {
       }
 
       var notice = new Notice(req.body.notice);
-
+      console.log(notice)
+      
       notice.author = user;
       notice.location = {
         type: "Point",
