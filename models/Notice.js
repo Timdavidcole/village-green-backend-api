@@ -125,7 +125,6 @@ NoticeSchema.methods.updateDownVoteCount = function() {
 };
 
 NoticeSchema.methods.toJSONFor = function(user) {
-  console.log(this.body);
   return {
     slug: this.slug,
     title: this.title,

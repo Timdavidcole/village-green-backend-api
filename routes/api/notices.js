@@ -132,6 +132,7 @@ router.post("/", auth.required, function(req, res, next) {
       };
 
       if (req.body.notice.parentNotice !== undefined) {
+        notice.parent = req.body.notice.parentNotice;
         Notice.findOne({
           slug: req.body.notice.parentNotice
         })
@@ -140,18 +141,16 @@ router.post("/", auth.required, function(req, res, next) {
             if (!noticeParent) {
               return res.sendStatus(404);
             }
-            notice.parent = noticeParent.slug;
-            noticeParent.noticeChildren.push(notice);
-
+            noticeParent.childNotices.push(notice);
+            noticeParent.save();
             return next();
           })
           .catch(next);
       } else {
-        notice.parent = 'global'
+        notice.parent = "global";
       }
 
       return notice.save().then(function(notice1) {
-        console.log(notice1);
         return res.json({
           notice: notice.toJSONFor(user)
         });
@@ -229,7 +228,7 @@ router.get("/:notice/children", auth.optional, function(req, res, next) {
     .then(function(user) {
       return req.notice
         .populate({
-          path: "noticeChildren",
+          path: "childNotices",
           populate: {
             path: "author"
           },
@@ -241,13 +240,8 @@ router.get("/:notice/children", auth.optional, function(req, res, next) {
         })
         .execPopulate()
         .then(function(notice) {
-          console.log('notice with children')
-          console.log(notice)
           return res.json({
-            noticeChildren: req.notice.childNotices.map(function(notice) {
-              console.log('map notices')
-              return notice.toJSONFor(user);
-            })
+            notice: notice.toJSONFor(user)
           });
         });
     })
