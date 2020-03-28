@@ -88,7 +88,8 @@ router.get("/", auth.optional, function(req, res, next) {
                   coordinates: [coords.lng, coords.lat]
                 }
               }
-            }
+            },
+            parent: "global"
           })
             .limit(Number(limit))
             .skip(Number(offset))
@@ -113,9 +114,6 @@ router.get("/", auth.optional, function(req, res, next) {
 });
 
 router.post("/", auth.required, function(req, res, next) {
-  console.log("POST /NOTICES/");
-  console.log(req.payload);
-  console.log(req.body);
   User.findById(req.payload.id)
     .then(function(user) {
       if (!user) {
@@ -132,23 +130,24 @@ router.post("/", auth.required, function(req, res, next) {
           user.location.coordinates[1]
         ]
       };
-      console.log(req.body.notice.parentNotice);
+
       if (req.body.notice.parentNotice !== undefined) {
         Notice.findOne({
           slug: req.body.notice.parentNotice
         })
           .populate("author")
           .then(function(noticeParent) {
-            console.log(noticeParent);
             if (!noticeParent) {
               return res.sendStatus(404);
             }
-            notice.parentNotice = noticeParent;
+            notice.parent = noticeParent.slug;
             noticeParent.noticeChildren.push(notice);
 
             return next();
           })
           .catch(next);
+      } else {
+        notice.parent = 'global'
       }
 
       return notice.save().then(function(notice1) {
@@ -162,7 +161,6 @@ router.post("/", auth.required, function(req, res, next) {
 });
 
 router.get("/:notice", auth.optional, function(req, res, next) {
-  console.log("/notices/:notice");
   Promise.all([
     req.payload ? User.findById(req.payload.id) : null,
     req.notice.populate("author").execPopulate()
