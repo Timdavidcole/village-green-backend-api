@@ -26,12 +26,10 @@ var NoticeSchema = new mongoose.Schema(
         ref: "Notice"
       }
     ],
-    parentNotices: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Notice"
-      }
-    ],
+    parentNotice: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Notice"
+    },
     pinCount: {
       type: Number,
       default: 0

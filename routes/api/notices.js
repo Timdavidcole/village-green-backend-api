@@ -97,7 +97,6 @@ router.get("/", auth.optional, function(req, res, next) {
           Notice.countDocuments(query).exec(),
           req.payload ? User.findById(req.payload.id) : null
         ]).then(function(results) {
-
           var notices = results[0];
           var noticesCount = results[1];
           var user = results[2];
@@ -114,6 +113,9 @@ router.get("/", auth.optional, function(req, res, next) {
 });
 
 router.post("/", auth.required, function(req, res, next) {
+  console.log("POST /NOTICES/");
+  console.log(req.payload);
+  console.log(req.body);
   User.findById(req.payload.id)
     .then(function(user) {
       if (!user) {
@@ -121,8 +123,7 @@ router.post("/", auth.required, function(req, res, next) {
       }
 
       var notice = new Notice(req.body.notice);
-      console.log(notice)
-      
+
       notice.author = user;
       notice.location = {
         type: "Point",
@@ -131,8 +132,27 @@ router.post("/", auth.required, function(req, res, next) {
           user.location.coordinates[1]
         ]
       };
+      console.log(req.body.notice.parentNotice);
+      if (req.body.notice.parentNotice !== undefined) {
+        Notice.findOne({
+          slug: req.body.notice.parentNotice
+        })
+          .populate("author")
+          .then(function(noticeParent) {
+            console.log(noticeParent);
+            if (!noticeParent) {
+              return res.sendStatus(404);
+            }
+            notice.parentNotice = noticeParent;
+            noticeParent.noticeChildren.push(notice);
 
-      return notice.save().then(function() {
+            return next();
+          })
+          .catch(next);
+      }
+
+      return notice.save().then(function(notice1) {
+        console.log(notice1);
         return res.json({
           notice: notice.toJSONFor(user)
         });
@@ -142,6 +162,7 @@ router.post("/", auth.required, function(req, res, next) {
 });
 
 router.get("/:notice", auth.optional, function(req, res, next) {
+  console.log("/notices/:notice");
   Promise.all([
     req.payload ? User.findById(req.payload.id) : null,
     req.notice.populate("author").execPopulate()
@@ -222,8 +243,11 @@ router.get("/:notice/children", auth.optional, function(req, res, next) {
         })
         .execPopulate()
         .then(function(notice) {
+          console.log('notice with children')
+          console.log(notice)
           return res.json({
-            noticeChildren: req.notice.noticeChildren.map(function(notice) {
+            noticeChildren: req.notice.childNotices.map(function(notice) {
+              console.log('map notices')
               return notice.toJSONFor(user);
             })
           });
