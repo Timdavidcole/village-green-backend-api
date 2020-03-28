@@ -113,54 +113,6 @@ router.get("/", auth.optional, function(req, res, next) {
     .catch(next);
 });
 
-router.get("/feed", auth.required, function(req, res, next) {
-  var limit = 20;
-  var offset = 0;
-
-  if (typeof req.query.limit !== "undefined") {
-    limit = req.query.limit;
-  }
-
-  if (typeof req.query.offset !== "undefined") {
-    offset = req.query.offset;
-  }
-
-  User.findById(req.payload.id).then(function(user) {
-    if (!user) {
-      return res.sendStatus(401);
-    }
-
-    Promise.all([
-      Article.find({
-        author: {
-          $in: user.following
-        }
-      })
-        .limit(Number(limit))
-        .skip(Number(offset))
-        .populate("author")
-        .exec(),
-      Article.count({
-        author: {
-          $in: user.following
-        }
-      })
-    ])
-      .then(function(results) {
-        var articles = results[0];
-        var articlesCount = results[1];
-
-        return res.json({
-          articles: articles.map(function(article) {
-            return article.toJSONFor(user);
-          }),
-          articlesCount: articlesCount
-        });
-      })
-      .catch(next);
-  });
-});
-
 router.post("/", auth.required, function(req, res, next) {
   User.findById(req.payload.id)
     .then(function(user) {
@@ -251,6 +203,33 @@ router.delete("/:notice", auth.required, function(req, res, next) {
       return res.sendStatus(403);
     }
   });
+});
+
+router.get("/:notice/children", auth.optional, function(req, res, next) {
+  Promise.resolve(req.payload ? User.findById(req.payload.id) : null)
+    .then(function(user) {
+      return req.notice
+        .populate({
+          path: "noticeChildren",
+          populate: {
+            path: "author"
+          },
+          options: {
+            sort: {
+              createdAt: "desc"
+            }
+          }
+        })
+        .execPopulate()
+        .then(function(notice) {
+          return res.json({
+            noticeChildren: req.notice.noticeChildren.map(function(notice) {
+              return notice.toJSONFor(user);
+            })
+          });
+        });
+    })
+    .catch(next);
 });
 
 router.post("/:notice/comments", auth.required, function(req, res, next) {
