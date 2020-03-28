@@ -20,6 +20,18 @@ var NoticeSchema = new mongoose.Schema(
         ref: "Comment"
       }
     ],
+    childNotices: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Notice"
+      }
+    ],
+    parentNotices: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Notice"
+      }
+    ],
     pinCount: {
       type: Number,
       default: 0
@@ -52,7 +64,6 @@ var NoticeSchema = new mongoose.Schema(
 );
 
 NoticeSchema.index({ location: "2dsphere" });
-
 
 NoticeSchema.plugin(uniqueValidator, {
   message: "is already taken"
@@ -116,7 +127,7 @@ NoticeSchema.methods.updateDownVoteCount = function() {
 };
 
 NoticeSchema.methods.toJSONFor = function(user) {
-  console.log(this.body)
+  console.log(this.body);
   return {
     slug: this.slug,
     title: this.title,
@@ -135,7 +146,7 @@ NoticeSchema.methods.toJSONFor = function(user) {
     isUpVoted: user ? user.isUpVoted(this._id) : false,
     isDownVoted: user ? user.isDownVoted(this._id) : false,
     id: this._id,
-    location: this.location,
+    location: this.location
   };
 };
 
