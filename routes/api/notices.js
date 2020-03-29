@@ -88,7 +88,8 @@ router.get("/", auth.optional, function(req, res, next) {
                   coordinates: [coords.lng, coords.lat]
                 }
               }
-            }
+            },
+            parent: "global"
           })
             .limit(Number(limit))
             .skip(Number(offset))
@@ -97,7 +98,6 @@ router.get("/", auth.optional, function(req, res, next) {
           Notice.countDocuments(query).exec(),
           req.payload ? User.findById(req.payload.id) : null
         ]).then(function(results) {
-
           var notices = results[0];
           var noticesCount = results[1];
           var user = results[2];
@@ -113,54 +113,6 @@ router.get("/", auth.optional, function(req, res, next) {
     .catch(next);
 });
 
-router.get("/feed", auth.required, function(req, res, next) {
-  var limit = 20;
-  var offset = 0;
-
-  if (typeof req.query.limit !== "undefined") {
-    limit = req.query.limit;
-  }
-
-  if (typeof req.query.offset !== "undefined") {
-    offset = req.query.offset;
-  }
-
-  User.findById(req.payload.id).then(function(user) {
-    if (!user) {
-      return res.sendStatus(401);
-    }
-
-    Promise.all([
-      Article.find({
-        author: {
-          $in: user.following
-        }
-      })
-        .limit(Number(limit))
-        .skip(Number(offset))
-        .populate("author")
-        .exec(),
-      Article.count({
-        author: {
-          $in: user.following
-        }
-      })
-    ])
-      .then(function(results) {
-        var articles = results[0];
-        var articlesCount = results[1];
-
-        return res.json({
-          articles: articles.map(function(article) {
-            return article.toJSONFor(user);
-          }),
-          articlesCount: articlesCount
-        });
-      })
-      .catch(next);
-  });
-});
-
 router.post("/", auth.required, function(req, res, next) {
   User.findById(req.payload.id)
     .then(function(user) {
@@ -169,8 +121,7 @@ router.post("/", auth.required, function(req, res, next) {
       }
 
       var notice = new Notice(req.body.notice);
-      console.log(notice)
-      
+
       notice.author = user;
       notice.location = {
         type: "Point",
@@ -179,6 +130,25 @@ router.post("/", auth.required, function(req, res, next) {
           user.location.coordinates[1]
         ]
       };
+
+      if (req.body.notice.parentNotice !== undefined) {
+        notice.parent = req.body.notice.parentNotice;
+        Notice.findOne({
+          slug: req.body.notice.parentNotice
+        })
+          .populate("author")
+          .then(function(noticeParent) {
+            if (!noticeParent) {
+              return res.sendStatus(404);
+            }
+            noticeParent.childNotices.push(notice);
+            noticeParent.save();
+            return next();
+          })
+          .catch(next);
+      } else {
+        notice.parent = "global";
+      }
 
       return notice.save().then(function() {
         return res.json({
@@ -251,6 +221,34 @@ router.delete("/:notice", auth.required, function(req, res, next) {
       return res.sendStatus(403);
     }
   });
+});
+
+router.get("/:notice/children", auth.optional, function(req, res, next) {
+  Promise.resolve(req.payload ? User.findById(req.payload.id) : null)
+    .then(function(user) {
+      return req.notice
+        .populate({
+          path: "childNotices",
+          populate: {
+            path: "author"
+          },
+          options: {
+            sort: {
+              createdAt: "desc"
+            }
+          }
+        })
+        .execPopulate()
+        .then(function(notice) {
+          return res.json({
+            notice: notice.toJSONFor(user),
+            childNotices: notice.childNotices.map(function(child) {
+              return child.toJSONFor(user);
+            })
+          });
+        });
+    })
+    .catch(next);
 });
 
 router.post("/:notice/comments", auth.required, function(req, res, next) {
