@@ -150,7 +150,7 @@ router.post("/", auth.required, function(req, res, next) {
         notice.parent = "global";
       }
 
-      return notice.save().then(function(notice1) {
+      return notice.save().then(function() {
         return res.json({
           notice: notice.toJSONFor(user)
         });
@@ -241,7 +241,10 @@ router.get("/:notice/children", auth.optional, function(req, res, next) {
         .execPopulate()
         .then(function(notice) {
           return res.json({
-            notice: notice.toJSONFor(user)
+            notice: notice.toJSONFor(user),
+            childNotices: notice.childNotices.map(function(child) {
+              return child.toJSONFor(user);
+            })
           });
         });
     })

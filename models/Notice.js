@@ -138,6 +138,7 @@ NoticeSchema.methods.toJSONFor = function(user) {
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
     tagList: this.tagList,
+    childNotices: this.childNotices,
     author: this.author.toProfileJSONFor(user),
     isPinned: user ? user.isPinned(this._id) : false,
     isUpVoted: user ? user.isUpVoted(this._id) : false,
