@@ -5,7 +5,7 @@ var User = mongoose.model("User");
 var auth = require("../auth");
 var geocoding = require("../../models/Geocoding");
 
-router.post("/users", function(req, res, next) {
+router.post("/users", function (req, res, next) {
   var user = new User();
 
   user.username = req.body.user.username;
@@ -13,51 +13,54 @@ router.post("/users", function(req, res, next) {
   user.setPassword(req.body.user.password);
   user.address = req.body.user.address;
 
+  if (req.body.user.image) {
+    user.image = req.body.user.image;
+  }
 
   geocoding
     .getCoordinates(user.address)
-    .then(data => {
+    .then((data) => {
       user.location = {
         type: "Point",
         coordinates: [
           data.results[0].geometry.location.lat,
-          data.results[0].geometry.location.lng
-        ]
+          data.results[0].geometry.location.lng,
+        ],
       };
     })
-    .then(data => {
-      user.save().then(function() {
+    .then((data) => {
+      user.save().then(function () {
         return res.json({
-          user: user.toAuthJSON()
+          user: user.toAuthJSON(),
         });
       });
     })
     .catch(next);
 });
 
-router.post("/users/login", function(req, res, next) {
+router.post("/users/login", function (req, res, next) {
   if (!req.body.user.email) {
     return res.status(422).json({
       errors: {
-        email: "can't be blank"
-      }
+        email: "can't be blank",
+      },
     });
   }
 
   if (!req.body.user.password) {
     return res.status(422).json({
       errors: {
-        password: "can't be blank"
-      }
+        password: "can't be blank",
+      },
     });
   }
 
   passport.authenticate(
     "local",
     {
-      session: false
+      session: false,
     },
-    function(err, user, info) {
+    function (err, user, info) {
       if (err) {
         return next(err);
       }
@@ -65,7 +68,7 @@ router.post("/users/login", function(req, res, next) {
       if (user) {
         user.token = user.generateJWT();
         return res.json({
-          user: user.toAuthJSON()
+          user: user.toAuthJSON(),
         });
       } else {
         return res.status(422).json(info);
@@ -74,23 +77,23 @@ router.post("/users/login", function(req, res, next) {
   )(req, res, next);
 });
 
-router.get("/user", auth.required, function(req, res, next) {
+router.get("/user", auth.required, function (req, res, next) {
   User.findById(req.payload.id)
-    .then(function(user) {
+    .then(function (user) {
       if (!user) {
         return res.sendStatus(401);
       }
 
       return res.json({
-        user: user.toAuthJSON()
+        user: user.toAuthJSON(),
       });
     })
     .catch(next);
 });
 
-router.put("/user", auth.required, function(req, res, next) {
+router.put("/user", auth.required, function (req, res, next) {
   User.findById(req.payload.id)
-    .then(function(user) {
+    .then(function (user) {
       if (!user) {
         return res.sendStatus(401);
       }
@@ -121,23 +124,23 @@ router.put("/user", auth.required, function(req, res, next) {
         user.address = req.body.user.address;
         geocoding
           .getCoordinates(user.address)
-          .then(data => {
+          .then((data) => {
             user.homeXCoord = data.results[0].geometry.location.lat;
             user.homeYCoord = data.results[0].geometry.location.lng;
           })
-          .then(date => {
-            user.save().then(function() {
+          .then((date) => {
+            user.save().then(function () {
               return res.json({
-                user: user.toAuthJSON()
+                user: user.toAuthJSON(),
               });
             });
           })
           .catch(next);
       } else {
-        return user.save().then(function() {
-          User.findById(req.payload.id).then(function(userNew) {
+        return user.save().then(function () {
+          User.findById(req.payload.id).then(function (userNew) {
             return res.json({
-              user: userNew.toAuthJSON()
+              user: userNew.toAuthJSON(),
             });
           });
         });
